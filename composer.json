@@ -14,20 +14,5 @@
         "easycorp/easyadmin-bundle": "^2.3",
         "stof/doctrine-extensions-bundle": "^1.4",
         "symfony-cmf/routing-bundle": "^2.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "HitcKit\\CoreBundle\\": ""
-        }
-    },
-    "config": {
-        "preferred-install": {
-            "*": "dist"
-        }
-    },
-    "scripts": {
-        "pre-install-cmd": [
-            "@composer create-project symfony/website-skeleton:^4.4 ."
-        ]
     }
 }

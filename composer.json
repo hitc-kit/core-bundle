@@ -1,8 +1,7 @@
 {
     "name": "hitc-kit/core-bundle",
     "type": "symfony-bundle",
-    "description": "Core of the CMS.",
-    "minimum-stability": "stable",
+    "description": "Ядро hitc-kit/cms",
     "license": "GPL-3.0-only",
     "authors": [
         {
@@ -14,8 +13,5 @@
         "easycorp/easyadmin-bundle": "^2.3",
         "stof/doctrine-extensions-bundle": "^1.4",
         "symfony-cmf/routing-bundle": "^2.4"
-    },
-    "conflict": {
-        "doctrine/common": "3.*"
     }
 }

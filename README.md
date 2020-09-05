@@ -1,1 +1,1 @@
-Core of the CMS.
+Ядро hitc-kit/cms

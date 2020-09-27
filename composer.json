@@ -2,7 +2,7 @@
     "name": "hitc-kit/core-bundle",
     "type": "symfony-bundle",
     "description": "Ядро hitc-kit/cms",
-    "license": "GPL-3.0-only",
+    "license": "MIT",
     "authors": [
         {
             "name": "Maksim Voskresenskii",

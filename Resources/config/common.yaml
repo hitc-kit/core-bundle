@@ -1,7 +1,0 @@
-#cmf_routing:
-#    dynamic:
-#        persistence:
-#            orm:
-#                route_class: HitcKit\CoreBundle\Entity\OrmRoute
-#        controllers_by_class:
-#            App\Entity\Product: App\Controller\DefaultController::index

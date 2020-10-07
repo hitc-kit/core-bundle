@@ -26,47 +26,26 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
     {
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (isset($bundles['CmfRoutingBundle'])) {
-            $config = [
-                'chain' => [
-                    'routers_by_id' => [
-                        'router.default' => 200,
-                        'cmf_routing.dynamic_router' => 100,
-                    ],
-                ],
-                'dynamic' => [
-                    'persistence' => [
-                        'orm' => [
-                            'enabled' => true,
-                            'route_class' => Node::class,
-                        ],
-                    ],
-                ],
-            ];
-
-            $container->prependExtensionConfig('cmf_routing', $config);
-        }
-
-        if (isset($bundles['DoctrineBundle'])) {
-            $config = [
-                'orm' => [
-                    'entity_managers' => [
-                        'default' => [
-                            'mappings' => [
-                                'HitcKitCoreBundle' => [
-                                    'type' => 'xml',
-                                    'dir' => 'Resources/config/doctrine-orm',
-                                    'prefix' => 'HitcKit\\CoreBundle\\Entity',
-                                    'alias' => 'hitc_kit_core',
-                                    'is_bundle' => true,
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-
-            $container->prependExtensionConfig('doctrine', $config);
-        }
+        // if (isset($bundles['DoctrineBundle'])) {
+        //     $config = [
+        //         'orm' => [
+        //             'entity_managers' => [
+        //                 'default' => [
+        //                     'mappings' => [
+        //                         'HitcKitCoreBundle' => [
+        //                             'type' => 'xml',
+        //                             'dir' => 'Resources/config/doctrine-orm',
+        //                             'prefix' => 'HitcKit\\CoreBundle\\Entity',
+        //                             'alias' => 'hitc_kit_core',
+        //                             'is_bundle' => true,
+        //                         ],
+        //                     ],
+        //                 ],
+        //             ],
+        //         ],
+        //     ];
+        //
+        //     $container->prependExtensionConfig('doctrine', $config);
+        // }
     }
 }

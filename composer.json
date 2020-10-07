@@ -11,12 +11,11 @@
     ],
     "require": {
         "easycorp/easyadmin-bundle": "^3.1",
-        "stof/doctrine-extensions-bundle": "^1.4",
         "symfony-cmf/routing-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0"
     },
     "conflict": {
-        "stof/doctrine-extensions-bundle": "1.5"
+        "doctrine/common": "^3.0"
     },
     "autoload": {
         "psr-4": {

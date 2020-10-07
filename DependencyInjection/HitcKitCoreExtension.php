@@ -3,7 +3,7 @@
 namespace HitcKit\CoreBundle\DependencyInjection;
 
 use Exception;
-// use HitcKit\CoreBundle\Entity\RouteOrm;
+use HitcKit\CoreBundle\Entity\Node;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -38,7 +38,7 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
                     'persistence' => [
                         'orm' => [
                             'enabled' => true,
-                            // 'route_class' => RouteOrm::class,
+                            'route_class' => Node::class,
                         ],
                     ],
                 ],
@@ -47,38 +47,26 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
             $container->prependExtensionConfig('cmf_routing', $config);
         }
 
-        if (isset($bundles['StofDoctrineExtensionsBundle'])) {
+        if (isset($bundles['DoctrineBundle'])) {
             $config = [
                 'orm' => [
-                    'default' => [
-                        'tree' => true,
-                    ],
-                ],
-            ];
-
-            $container->prependExtensionConfig('stof_doctrine_extensions', $config);
-
-            if (isset($bundles['DoctrineBundle'])) {
-                $config = [
-                    'orm' => [
-                        'entity_managers' => [
-                            'default' => [
-                                'mappings' => [
-                                    'gedmo_tree' => [
-                                        'type' => 'annotation',
-                                        'dir' => '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Tree/Entity',
-                                        'prefix' => 'Gedmo\\Tree\\Entity',
-                                        'alias' => 'GedmoTree',
-                                        'is_bundle' => false,
-                                    ],
+                    'entity_managers' => [
+                        'default' => [
+                            'mappings' => [
+                                'HitcKitCoreBundle' => [
+                                    'type' => 'xml',
+                                    'dir' => 'Resources/config/doctrine-orm',
+                                    'prefix' => 'HitcKit\\CoreBundle\\Entity',
+                                    'alias' => 'hitc_kit_core',
+                                    'is_bundle' => true,
                                 ],
                             ],
                         ],
                     ],
-                ];
+                ],
+            ];
 
-                $container->prependExtensionConfig('doctrine', $config);
-            }
+            $container->prependExtensionConfig('doctrine', $config);
         }
     }
 }

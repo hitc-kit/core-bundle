@@ -7,7 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orm_tree", indexes={@ORM\Index(name="name_idx", columns={"name"})})
+ * @ORM\Table(
+ *     name="orm_routes",
+ *     indexes={@ORM\Index(columns={"name"}), @ORM\Index(columns={"staticPrefix"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(columns={"group_route", "staticPrefix"})}
+ * )
  */
 class TreeNode extends Route
 {
@@ -30,6 +34,12 @@ class TreeNode extends Route
      * @ORM\Column(type="integer")
      */
     protected $position = 0;
+
+    /**
+     * @var string
+     * @ORM\Column()
+     */
+    protected $groupRoute = 'main_tree';
 
     public function __construct(array $options = [])
     {
@@ -79,6 +89,25 @@ class TreeNode extends Route
     public function setPosition(int $position): TreeNode
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroupRoute(): string
+    {
+        return $this->groupRoute;
+    }
+
+    /**
+     * @param string $groupRoute
+     * @return TreeNode
+     */
+    public function setGroupRoute(string $groupRoute): TreeNode
+    {
+        $this->groupRoute = $groupRoute;
 
         return $this;
     }

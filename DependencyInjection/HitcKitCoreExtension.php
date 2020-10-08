@@ -3,12 +3,13 @@
 namespace HitcKit\CoreBundle\DependencyInjection;
 
 use Exception;
-// use HitcKit\CoreBundle\Entity\TreeNode;
+use HitcKit\CoreBundle\Entity\TreeNode;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Ramsey\Uuid\Doctrine\UuidType;
 
 class HitcKitCoreExtension extends Extension implements PrependExtensionInterface
 {
@@ -38,13 +39,25 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
                     'persistence' => [
                         'orm' => [
                             'enabled' => true,
-                            // 'route_class' => TreeNode::class,
+                            'route_class' => TreeNode::class,
                         ],
                     ],
                 ],
             ];
 
             $container->prependExtensionConfig('cmf_routing', $config);
+        }
+
+        if (isset($bundles['DoctrineBundle'])) {
+            $config = [
+                'dbal' => [
+                    'types' => [
+                        'uuid' => UuidType::class,
+                    ],
+                ],
+            ];
+
+            $container->prependExtensionConfig('doctrine', $config);
         }
     }
 }

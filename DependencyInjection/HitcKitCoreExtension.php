@@ -3,7 +3,7 @@
 namespace HitcKit\CoreBundle\DependencyInjection;
 
 use Exception;
-use HitcKit\CoreBundle\Entity\TreeNode;
+use HitcKit\CoreBundle\Entity\Route;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -38,7 +38,7 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
                     'persistence' => [
                         'orm' => [
                             'enabled' => true,
-                            'route_class' => TreeNode::class,
+                            'route_class' => Route::class,
                         ],
                     ],
                 ],

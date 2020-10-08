@@ -2,7 +2,7 @@
 
 namespace HitcKit\CoreBundle\Entity;
 
-use Symfony\Cmf\Bundle\RoutingBundle\Model\Route;
+use Symfony\Cmf\Bundle\RoutingBundle\Model\Route as RouteModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,13 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(columns={"group_route", "staticPrefix"})}
  * )
  */
-class TreeNode extends Route
+class Route extends RouteModel
 {
     /**
      * @var int
      * @ORM\Id
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue
      */
     protected $id;
 
@@ -37,7 +37,7 @@ class TreeNode extends Route
 
     /**
      * @var string
-     * @ORM\Column()
+     * @ORM\Column
      */
     protected $groupRoute = 'main_tree';
 
@@ -65,9 +65,9 @@ class TreeNode extends Route
 
     /**
      * @param string $name
-     * @return TreeNode
+     * @return Route
      */
-    public function setName(string $name): TreeNode
+    public function setName(string $name): Route
     {
         $this->name = $name;
 
@@ -84,9 +84,9 @@ class TreeNode extends Route
 
     /**
      * @param int $position
-     * @return TreeNode
+     * @return Route
      */
-    public function setPosition(int $position): TreeNode
+    public function setPosition(int $position): Route
     {
         $this->position = $position;
 
@@ -103,9 +103,9 @@ class TreeNode extends Route
 
     /**
      * @param string $groupRoute
-     * @return TreeNode
+     * @return Route
      */
-    public function setGroupRoute(string $groupRoute): TreeNode
+    public function setGroupRoute(string $groupRoute): Route
     {
         $this->groupRoute = $groupRoute;
 

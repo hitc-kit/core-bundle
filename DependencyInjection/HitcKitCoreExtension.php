@@ -47,17 +47,5 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
 
             $container->prependExtensionConfig('cmf_routing', $config);
         }
-
-        if (isset($bundles['DoctrineBundle'])) {
-            $config = [
-                'dbal' => [
-                    'types' => [
-                        'uuid' => UuidType::class,
-                    ],
-                ],
-            ];
-
-            $container->prependExtensionConfig('doctrine', $config);
-        }
     }
 }

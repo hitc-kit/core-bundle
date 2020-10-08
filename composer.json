@@ -13,8 +13,7 @@
         "easycorp/easyadmin-bundle": "^3.1",
         "symfony-cmf/routing-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0",
-        "knplabs/knp-paginator-bundle": "^5.3",
-        "ramsey/uuid-doctrine": "^1.6"
+        "knplabs/knp-paginator-bundle": "^5.3"
     },
     "conflict": {
         "doctrine/common": "^3.0"

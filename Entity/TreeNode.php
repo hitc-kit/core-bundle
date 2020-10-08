@@ -4,8 +4,6 @@ namespace HitcKit\CoreBundle\Entity;
 
 use Symfony\Cmf\Bundle\RoutingBundle\Model\Route;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity
@@ -22,10 +20,8 @@ class TreeNode extends Route
     protected $id;
 
     /**
-     * @var UuidInterface
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
+     * @var string
+     * @ORM\Column(unique=true)
      */
     protected $name;
 
@@ -34,6 +30,12 @@ class TreeNode extends Route
      * @ORM\Column(type="integer")
      */
     protected $position = 0;
+
+    public function __construct(array $options = [])
+    {
+        $this->name = uniqid('', true);
+        parent::__construct($options);
+    }
 
     /**
      * @return int
@@ -52,10 +54,10 @@ class TreeNode extends Route
     }
 
     /**
-     * @param UuidInterface $name
+     * @param string $name
      * @return TreeNode
      */
-    public function setName(UuidInterface $name): TreeNode
+    public function setName(string $name): TreeNode
     {
         $this->name = $name;
 

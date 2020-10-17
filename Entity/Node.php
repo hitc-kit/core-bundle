@@ -45,6 +45,9 @@ class Node
     /* TODO: Добавить связь с на себя самого */
     protected $parent;
 
+    /* TODO: Добавить связь на Route через поле "name" */
+    protected $route;
+
     /**
      * @return int
      */
@@ -67,7 +70,7 @@ class Node
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -86,7 +89,7 @@ class Node
     /**
      * @return string
      */
-    public function getKeywords(): string
+    public function getKeywords(): ?string
     {
         return $this->keywords;
     }
@@ -105,7 +108,7 @@ class Node
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -117,6 +120,25 @@ class Node
     public function setDescription(string $description): Node
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return Node
+     */
+    public function setType(string $type): Node
+    {
+        $this->type = $type;
 
         return $this;
     }

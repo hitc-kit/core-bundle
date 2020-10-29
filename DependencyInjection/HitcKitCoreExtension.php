@@ -4,6 +4,7 @@ namespace HitcKit\CoreBundle\DependencyInjection;
 
 use Exception;
 use HitcKit\CoreBundle\Entity\Route;
+use HitcKit\CoreBundle\Services\NodeTypeInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -18,6 +19,11 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $container
+            ->registerForAutoconfiguration(NodeTypeInterface::class)
+            ->addTag('hitc_kit_core.node_type')
+        ;
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
     }

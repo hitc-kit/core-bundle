@@ -2,6 +2,7 @@
 
 namespace HitcKit\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,6 +18,28 @@ class Node
      * @ORM\GeneratedValue
      */
     protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Node", inversedBy="children")
+     */
+    protected $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Node", mappedBy="parent")
+     */
+    protected $children;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Route")
+     * @ORM\JoinColumn(name="route", referencedColumnName="name")
+     */
+    protected $route;
+
+    /**
+     * @var string
+     * @ORM\Column
+     */
+    protected $type;
 
     /**
      * @var string
@@ -36,17 +59,10 @@ class Node
      */
     protected $description;
 
-    /**
-     * @var string
-     * @ORM\Column
-     */
-    protected $type;
-
-    /* TODO: Добавить связь с на себя самого */
-    protected $parent;
-
-    /* TODO: Добавить связь на Route через поле "name" */
-    protected $route;
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     /**
      * @return int

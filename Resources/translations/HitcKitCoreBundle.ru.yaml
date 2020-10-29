@@ -1,0 +1,9 @@
+MAIN: Основное
+TREE: Дерево сайта
+Node: Раздел
+Title: Заголовок
+Keywords: Ключевые слвоа
+Description: Описание
+Type: Тип
+TITLE_NODE_TYPE_SELECT: Выбрать тип нового Раздела
+LINK_TO_NODE_TYPE_SELECT: К выбору типа Раздела

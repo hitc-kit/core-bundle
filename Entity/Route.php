@@ -16,16 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Route extends RouteModel
 {
     /**
-     * @var int
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue
-     */
-    protected $id;
-
-    /**
      * @var string
-     * @ORM\Column(unique=true)
+     * @ORM\Id
+     * @ORM\Column(type="string", length=23)
      */
     protected $name;
 
@@ -41,18 +34,9 @@ class Route extends RouteModel
      */
     protected $groupRoute = 'main_tree';
 
-    public function __construct(array $options = [])
+    public function __construct()
     {
         $this->name = uniqid('', true);
-        parent::__construct($options);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     /**
@@ -61,17 +45,6 @@ class Route extends RouteModel
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return Route
-     */
-    public function setName(string $name): Route
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -108,6 +81,17 @@ class Route extends RouteModel
     public function setGroupRoute(string $groupRoute): Route
     {
         $this->groupRoute = $groupRoute;
+
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return Route
+     */
+    public function setName(string $name): Route
+    {
+        $this->name = $name;
 
         return $this;
     }

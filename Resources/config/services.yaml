@@ -6,3 +6,10 @@ services:
     HitcKit\CoreBundle\Controller\:
         resource: '../../Controller/*'
         tags: [ 'controller.service_arguments' ]
+
+    HitcKit\CoreBundle\Services\:
+        resource: '../../Services/*'
+
+    HitcKit\CoreBundle\Services\NodeTypeManager:
+        arguments:
+            - !tagged_iterator hitc_kit_core.node_type

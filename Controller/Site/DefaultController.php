@@ -23,9 +23,9 @@ class DefaultController extends AbstractController
     public function home(ChainRouterInterface $router)
     {
         $route = $router->getRouteCollection()->get('home');
-        $controller = (string)$route->getDefault(RouteOrm::CONTROLLER_NAME);
+        $controller = $route ? (string)$route->getDefault(RouteOrm::CONTROLLER_NAME) : false;
 
-        if (empty($controller)) {
+        if (!$controller) {
             throw $this->createNotFoundException();
         }
 

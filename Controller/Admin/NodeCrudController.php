@@ -6,18 +6,26 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
 use HitcKit\CoreBundle\Entity\Node;
+use HitcKit\CoreBundle\Services\CoreType;
 use HitcKit\CoreBundle\Services\NodeTypeManager;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class NodeCrudController extends AbstractCrudController
 {
+    protected $request;
     protected $nodeTypeManager;
 
-    public function __construct(NodeTypeManager $nodeTypeManager)
+    public function __construct(RequestStack $rStack, NodeTypeManager $nodeTypeManager)
     {
+        $this->request = $rStack->getCurrentRequest();
         $this->nodeTypeManager = $nodeTypeManager;
     }
 
@@ -28,9 +36,7 @@ class NodeCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $request = $this->get('request_stack')->getCurrentRequest();
-
-        if (empty($request->query->get('nodeType'))) {
+        if (empty($this->request->query->get('nodeType'))) {
             $actions
                 ->remove(Crud::PAGE_NEW, Action::SAVE_AND_RETURN)
                 ->remove(Crud::PAGE_NEW, Action::SAVE_AND_ADD_ANOTHER)
@@ -38,7 +44,7 @@ class NodeCrudController extends AbstractCrudController
             ;
         } else {
             $crudUrlGenerator = $this->get(CrudUrlGenerator::class);
-            $url = $crudUrlGenerator->build($request->query->all())->unset('nodeType')->generateUrl();
+            $url = $crudUrlGenerator->build($this->request->query->all())->unset('nodeType')->generateUrl();
             $action = Action::new('toTypeSelect', 'LINK_TO_NODE_TYPE_SELECT')->linkToUrl($url);
             $actions->add(Crud::PAGE_NEW, $action);
         }
@@ -62,9 +68,31 @@ class NodeCrudController extends AbstractCrudController
         return $responseParameters;
     }
 
-
-    public function new(AdminContext $context)
+    public function configureFields(string $pageName): iterable
     {
-        return parent::new($context);
+        if (Crud::PAGE_NEW === $pageName) {
+            $typeOptions = [
+                'data' => $this->request->query->get('nodeType', CoreType::getName())
+            ];
+
+            return [
+                FormField::addPanel('SEO'),
+                TextField::new('type')
+                    ->setFormType(HiddenType::class)
+                    ->setFormTypeOptions($typeOptions)
+                ,
+                'title',
+                'keywords',
+                'description',
+                FormField::addPanel('SECTION'),
+                'heading',
+                TextEditorField::new('content'),
+                BooleanField::new('showInMenu')
+                    ->setFormTypeOption('label_attr', ['class' => 'checkbox-custom'])
+                ,
+            ];
+        } else {
+            return parent::configureFields($pageName);
+        }
     }
 }

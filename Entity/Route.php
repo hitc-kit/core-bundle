@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="orm_routes",
- *     indexes={@ORM\Index(columns={"name"}), @ORM\Index(columns={"staticPrefix"})},
+ *     indexes={@ORM\Index(columns={"staticPrefix"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(columns={"group_route", "staticPrefix"})}
  * )
  */
@@ -34,9 +34,10 @@ class Route extends RouteModel
      */
     protected $groupRoute = 'main_tree';
 
-    public function __construct()
+    public function __construct(array $options = [])
     {
         $this->name = uniqid('', true);
+        parent::__construct($options);
     }
 
     /**
@@ -45,6 +46,17 @@ class Route extends RouteModel
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Route
+     */
+    public function setName(string $name): Route
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -81,17 +93,6 @@ class Route extends RouteModel
     public function setGroupRoute(string $groupRoute): Route
     {
         $this->groupRoute = $groupRoute;
-
-        return $this;
-    }
-
-    /**
-     * @param string $name
-     * @return Route
-     */
-    public function setName(string $name): Route
-    {
-        $this->name = $name;
 
         return $this;
     }

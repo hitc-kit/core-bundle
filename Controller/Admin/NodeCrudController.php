@@ -5,6 +5,7 @@ namespace HitcKit\CoreBundle\Controller\Admin;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
@@ -51,6 +52,16 @@ class NodeCrudController extends AbstractCrudController
             ->overrideTemplate('crud/new', '@HitcKitCore/new_type_select.html.twig')
         ;
     }
+
+    public function configureResponseParameters(KeyValueStore $responseParameters): KeyValueStore
+    {
+        if (Crud::PAGE_NEW === $responseParameters->get('pageName')) {
+            $responseParameters->set('nodeTypes', $this->nodeTypeManager->getTypesList());
+        }
+
+        return $responseParameters;
+    }
+
 
     public function new(AdminContext $context)
     {

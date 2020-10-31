@@ -2,27 +2,20 @@
 
 namespace HitcKit\CoreBundle\Services;
 
-use HitcKit\CoreBundle\Entity\Node;
+use HitcKit\CoreBundle\Controller\Site\DefaultController;
+// use HitcKit\CoreBundle\Entity\Node;
 
 class CoreType implements NodeTypeInterface
 {
-    public function getName(): string
+    use BaseTypeTrait;
+
+    public static function getName(): string
     {
-        // TODO: Implement getName() method.
+        return 'hitc_kit_core.core_type';
     }
 
     public function getNameController(): string
     {
-        // TODO: Implement getNameController() method.
-    }
-
-    public function configureFields(string $pageName): iterable
-    {
-        // TODO: Implement configureFields() method.
-    }
-
-    public function isEnabled(Node $parent): bool
-    {
-        // TODO: Implement isEnabled() method.
+        return DefaultController::class.'::index';
     }
 }

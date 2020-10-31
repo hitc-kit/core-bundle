@@ -7,12 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orm_tree")
+ * @ORM\Table(
+ *     name="orm_tree",
+ *     indexes={@ORM\Index(columns={"type"})}
+ * )
  */
 class Node
 {
     /**
-     * @var int
+     * @var ?int
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
@@ -36,25 +39,25 @@ class Node
     protected $route;
 
     /**
-     * @var string
+     * @var ?string
      * @ORM\Column
      */
     protected $type;
 
     /**
-     * @var string
+     * @var ?string
      * @ORM\Column(nullable=true)
      */
     protected $title;
 
     /**
-     * @var string
+     * @var ?string
      * @ORM\Column(type="text", nullable=true)
      */
     protected $keywords;
 
     /**
-     * @var string
+     * @var ?string
      * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
@@ -67,7 +70,7 @@ class Node
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -141,7 +144,7 @@ class Node
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getType(): ?string
     {

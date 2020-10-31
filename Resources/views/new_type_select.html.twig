@@ -16,8 +16,9 @@
                 <div class="content-panel-body without-header without-footer">
                     {% block page_content %}
                         <div class="list-group">
-                            <a href="{{ ea_url({ nodeType: '1' }) }}" class="list-group-item list-group-item-action">Тип 1</a>
-                            <a href="{{ ea_url({ nodeType: '2' }) }}" class="list-group-item list-group-item-action">Тип 2</a>
+                            {% for type, label in nodeTypes %}
+                                <a href="{{ ea_url({ nodeType: type }) }}" class="list-group-item list-group-item-action">{{ label }}</a>
+                            {% endfor %}
                         </div>
                     {% endblock %}
                 </div>

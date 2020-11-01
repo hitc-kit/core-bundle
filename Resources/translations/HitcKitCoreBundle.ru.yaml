@@ -1,5 +1,3 @@
-MAIN: Основное
-TREE: Дерево сайта
 Node: Раздел
 Title: Заголовок
 Keywords: Ключевые слова
@@ -8,8 +6,6 @@ Type: Тип
 Heading: Заголовок
 Content: Содержание
 Show In Menu: Отображать в меню
-TITLE_NODE_TYPE_SELECT: Выбрать тип нового Раздела
-LINK_TO_NODE_TYPE_SELECT: К выбору типа Раздела
-HITC_KIT_CORE.CORE_TYPE: Простой раздел
-SEO: Продвижение
-SECTION: Раздел
+hitckit_core.core_type: Простой раздел
+seo: Продвижение
+section: Раздел

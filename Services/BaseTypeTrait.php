@@ -13,7 +13,7 @@ trait BaseTypeTrait
     {
         $name = static::getName();
         $domain = preg_replace('/((?<=Bundle).+$|\\\\)/u', '', __CLASS__);
-        return $translator == null ? $name : $translator->trans(strtoupper($name), [], $domain);
+        return $translator == null ? $name : $translator->trans($name, [], $domain);
     }
 
     public function isEnabled(?Node $parent): bool

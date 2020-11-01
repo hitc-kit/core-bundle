@@ -1,7 +1,7 @@
 {
     "name": "hitc-kit/core-bundle",
     "type": "symfony-bundle",
-    "description": "Ядро hitc-kit/cms",
+    "description": "Ядро для «hitc-kit/cms»",
     "license": "MIT",
     "authors": [
         {
@@ -10,13 +10,12 @@
         }
     ],
     "require": {
+        "sonata-project/admin-bundle": "^3.78",
+        "sonata-project/doctrine-orm-admin-bundle": "^3.24",
         "symfony-cmf/routing-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-paginator-bundle": "^5.3",
         "friendsofsymfony/ckeditor-bundle": "^2.2"
-    },
-    "conflict": {
-        "doctrine/common": "^3.0"
     },
     "autoload": {
         "psr-4": {

@@ -11,7 +11,7 @@ class CoreType implements NodeTypeInterface
 
     public static function getName(): string
     {
-        return 'hitc_kit_core.core_type';
+        return 'hitckit_core.core_type';
     }
 
     public function getNameController(): string

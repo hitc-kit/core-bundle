@@ -1,0 +1,2 @@
+hitckit_core_file:
+    resource: '@HitcKitCoreBundle/Resources/config/routes.yaml'

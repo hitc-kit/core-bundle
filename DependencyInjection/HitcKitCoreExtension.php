@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\Yaml\Yaml;
 
 class HitcKitCoreExtension extends Extension implements PrependExtensionInterface
 {
@@ -21,7 +22,7 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
     {
         $container
             ->registerForAutoconfiguration(NodeTypeInterface::class)
-            ->addTag('hitc_kit_core.node_type')
+            ->addTag('hitckit_core.node_type')
         ;
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -52,31 +53,22 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
         }
 
         if (isset($bundles['FOSCKEditorBundle'])) {
-            $container->prependExtensionConfig('fos_ck_editor', [
-                'default_config' => 'default',
-                'configs' => [
-                    'default' => [
-                        'height' => 350,
-                        'allowedContent' => true,
-                        'format_tags' => 'p;h2;h3;h4;h5;h6;pre;address;div',
-                        'toolbarGroups' => [
-                            ['name' => 'document', 'groups' => ['mode', 'tools', 'document', 'doctools']],
-                            [ 'name' => 'clipboard', 'groups' => [ 'clipboard', 'cleanup', 'undo' ] ],
-                            [ 'name' => 'editing', 'groups' => [ 'find', 'selection', 'spellchecker', 'editing' ] ],
-                            '/',
-                            [ 'name' => 'paragraph', 'groups' => [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] ],
-                            [ 'name' => 'links', 'groups' => [ 'links' ] ],
-                            [ 'name' => 'insert', 'groups' => [ 'insert' ] ],
-                            '/',
-                            [ 'name' => 'basicstyles', 'groups' => [ 'basicstyles' ] ],
-                            [ 'name' => 'styles', 'groups' => [ 'styles' ] ],
-                            [ 'name' => 'colors', 'groups' => [ 'colors' ] ],
-                            [ 'name' => 'others', 'groups' => [ 'others' ] ],
-                            [ 'name' => 'about', 'groups' => [ 'about' ] ],
-                        ],
-                        'removeButtons' => 'BidiLtr,BidiRtl,Language,Scayt,Flash,Smiley,Iframe,Styles',
-                    ],
-                ],
+            $config = Yaml::parseFile(__DIR__.'/../Resources/config/fos_ck_editor.yaml');
+            $container->prependExtensionConfig('fos_ck_editor', $config);
+        }
+
+        if (isset($bundles['SonataAdminBundle'])) {
+            $container->loadFromExtension('sonata_admin', [
+                'title' => 'Надежный IT сервис',
+                'options' => ['title_mode' => 'single_text']
+            ]);
+
+            $container->prependExtensionConfig('framework', [
+                'translator' => [
+                    'paths' => [
+                        realpath(__DIR__.'/../Resources/translations')
+                    ]
+                ]
             ]);
         }
     }

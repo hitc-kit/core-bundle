@@ -12,4 +12,4 @@ services:
 
     HitcKit\CoreBundle\Services\NodeTypeManager:
         arguments:
-            - !tagged_iterator { tag: hitc_kit_core.node_type, index_by: key, default_index_method: getName }
+            - !tagged_iterator { tag: hitckit_core.node_type, index_by: key, default_index_method: getName }

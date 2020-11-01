@@ -1,1 +1,1 @@
-Ядро hitc-kit/cms
+Ядро для «hitc-kit/cms»

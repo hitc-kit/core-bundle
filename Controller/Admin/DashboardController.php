@@ -2,6 +2,7 @@
 
 namespace HitcKit\CoreBundle\Controller\Admin;
 
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -41,4 +42,13 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('TREE', 'fa fa-sitemap', Node::class),
         ];
     }
+
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig')
+        ;
+    }
+
+
 }

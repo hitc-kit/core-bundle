@@ -8,10 +8,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\CrudUrlGenerator;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use HitcKit\CoreBundle\Entity\Node;
 use HitcKit\CoreBundle\Services\CoreType;
 use HitcKit\CoreBundle\Services\NodeTypeManager;
@@ -41,12 +44,16 @@ class NodeCrudController extends AbstractCrudController
                 ->remove(Crud::PAGE_NEW, Action::SAVE_AND_RETURN)
                 ->remove(Crud::PAGE_NEW, Action::SAVE_AND_ADD_ANOTHER)
                 ->add(Crud::PAGE_NEW, Action::INDEX)
+                ->update(Crud::PAGE_NEW, Action::INDEX, function (Action $action) {
+                    return $action->addCssClass('btn');
+                })
             ;
         } else {
             $crudUrlGenerator = $this->get(CrudUrlGenerator::class);
             $url = $crudUrlGenerator->build($this->request->query->all())->unset('nodeType')->generateUrl();
-            $action = Action::new('toTypeSelect', 'LINK_TO_NODE_TYPE_SELECT')->linkToUrl($url);
+            $action = Action::new('toTypeSelect', 'LINK_TO_NODE_TYPE_SELECT')->linkToUrl($url)->addCssClass('btn');
             $actions->add(Crud::PAGE_NEW, $action);
+
         }
 
         return $actions;
@@ -71,22 +78,30 @@ class NodeCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         if (Crud::PAGE_NEW === $pageName) {
-            $typeOptions = [
-                'data' => $this->request->query->get('nodeType', CoreType::getName())
-            ];
 
             return [
                 FormField::addPanel('SEO'),
-                TextField::new('type')
+                Field::new('type')
                     ->setFormType(HiddenType::class)
-                    ->setFormTypeOptions($typeOptions)
+                    ->setFormTypeOptions([
+                        'data' => $this->request->query->get('nodeType', CoreType::getName())
+                    ])
                 ,
-                'title',
+                Field::new('title')
+                    ->setFormTypeOptions([
+                        'attr' => ['class' => 'mw-100'],
+                    ])
+                ,
                 'keywords',
                 'description',
                 FormField::addPanel('SECTION'),
                 'heading',
-                TextEditorField::new('content'),
+                Field::new('content')
+                    ->setFormType(CKEditorType::class)
+                    ->setFormTypeOptions([
+                        'attr' => ['class' => 'mw-100'],
+                    ])
+                ,
                 BooleanField::new('showInMenu')
                     ->setFormTypeOption('label_attr', ['class' => 'checkbox-custom'])
                 ,

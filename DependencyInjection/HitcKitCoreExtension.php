@@ -33,7 +33,7 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
         $bundles = $container->getParameter('kernel.bundles');
 
         if (isset($bundles['CmfRoutingBundle'])) {
-            $config = [
+            $container->prependExtensionConfig('cmf_routing', [
                 'chain' => [
                     'routers_by_id' => [
                         'router.default' => 200,
@@ -48,9 +48,36 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
                         ],
                     ],
                 ],
-            ];
+            ]);
+        }
 
-            $container->prependExtensionConfig('cmf_routing', $config);
+        if (isset($bundles['FOSCKEditorBundle'])) {
+            $container->prependExtensionConfig('fos_ck_editor', [
+                'default_config' => 'default',
+                'configs' => [
+                    'default' => [
+                        'height' => 350,
+                        'allowedContent' => true,
+                        'format_tags' => 'p;h2;h3;h4;h5;h6;pre;address;div',
+                        'toolbarGroups' => [
+                            ['name' => 'document', 'groups' => ['mode', 'tools', 'document', 'doctools']],
+                            [ 'name' => 'clipboard', 'groups' => [ 'clipboard', 'cleanup', 'undo' ] ],
+                            [ 'name' => 'editing', 'groups' => [ 'find', 'selection', 'spellchecker', 'editing' ] ],
+                            '/',
+                            [ 'name' => 'paragraph', 'groups' => [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] ],
+                            [ 'name' => 'links', 'groups' => [ 'links' ] ],
+                            [ 'name' => 'insert', 'groups' => [ 'insert' ] ],
+                            '/',
+                            [ 'name' => 'basicstyles', 'groups' => [ 'basicstyles' ] ],
+                            [ 'name' => 'styles', 'groups' => [ 'styles' ] ],
+                            [ 'name' => 'colors', 'groups' => [ 'colors' ] ],
+                            [ 'name' => 'others', 'groups' => [ 'others' ] ],
+                            [ 'name' => 'about', 'groups' => [ 'about' ] ],
+                        ],
+                        'removeButtons' => 'BidiLtr,BidiRtl,Language,Scayt,Flash,Smiley,Iframe,Styles',
+                    ],
+                ],
+            ]);
         }
     }
 }

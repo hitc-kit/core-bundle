@@ -1,6 +1,6 @@
 <?php
 
-namespace HitcKit\CoreBundle\Controller\Site;
+namespace HitcKit\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Cmf\Component\Routing\ChainRouterInterface;

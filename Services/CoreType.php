@@ -2,7 +2,7 @@
 
 namespace HitcKit\CoreBundle\Services;
 
-use HitcKit\CoreBundle\Controller\Site\DefaultController;
+use HitcKit\CoreBundle\Controller\DefaultController;
 // use HitcKit\CoreBundle\Entity\Node;
 
 class CoreType implements NodeTypeInterface

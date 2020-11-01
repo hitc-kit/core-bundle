@@ -10,7 +10,6 @@
         }
     ],
     "require": {
-        "easycorp/easyadmin-bundle": "^3.1",
         "symfony-cmf/routing-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-paginator-bundle": "^5.3",

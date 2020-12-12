@@ -15,217 +15,196 @@ use Doctrine\ORM\Mapping as ORM;
 class Node
 {
     /**
-     * @var ?int
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue
      */
-    protected $id;
+    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Node", inversedBy="children")
      */
-    protected $parent;
+    private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Node", mappedBy="parent")
      */
-    protected $children;
+    private $children;
 
     /**
      * @ORM\OneToOne(targetEntity="Route")
-     * @ORM\JoinColumn(name="route", referencedColumnName="name")
+     * @ORM\JoinColumn(name="route", referencedColumnName="name", nullable=false)
      */
-    protected $route;
+    private $route;
 
     /**
-     * @var ?string
      * @ORM\Column
      */
-    protected $type;
+    private $type;
 
     /**
-     * @var ?string
      * @ORM\Column(nullable=true)
      */
-    protected $title;
+    private $title;
 
     /**
-     * @var ?string
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $keywords;
+    private $keywords;
 
     /**
-     * @var ?string
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $description;
+    private $description;
 
     /**
-     * @var ?string
      * @ORM\Column(nullable=true)
      */
-    protected $heading;
+    private $heading;
 
     /**
-     * @var ?string
      * @ORM\Column(nullable=true)
      */
-    protected $content;
+    private $content;
 
     /**
-     * @var bool
      * @ORM\Column(type="boolean")
      */
-    protected $showInMenu = true;
+    private $showInMenu = true;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $priority = 0;
 
     public function __construct()
     {
         $this->children = new ArrayCollection();
     }
 
-    /**
-     * @param int $id
-     * @return Node
-     */
-    public function setId(int $id): Node
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param string $type
-     * @return Node
-     */
-    public function setType(string $type): Node
+    public function setType(string $type): self
     {
         $this->type = $type;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @param string|null $title
-     * @return Node
-     */
-    public function setTitle(?string $title): Node
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string|null $keywords
-     * @return Node
-     */
-    public function setKeywords(?string $keywords): Node
+    public function setKeywords(?string $keywords): self
     {
         $this->keywords = $keywords;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getKeywords(): ?string
     {
         return $this->keywords;
     }
 
-    /**
-     * @param string|null $description
-     * @return Node
-     */
-    public function setDescription(?string $description): Node
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $heading
-     * @return Node
-     */
-    public function setHeading(?string $heading): Node
+    public function setHeading(?string $heading): self
     {
         $this->heading = $heading;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getHeading(): ?string
     {
         return $this->heading;
     }
 
-    /**
-     * @param string|null $content
-     * @return Node
-     */
-    public function setContent(?string $content): Node
+    public function setContent(?string $content): self
     {
         $this->content = $content;
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @param bool $showInMenu
-     * @return Node
-     */
-    public function setShowInMenu(bool $showInMenu): Node
+    public function setShowInMenu(bool $showInMenu): self
     {
         $this->showInMenu = $showInMenu;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowInMenu(): bool
     {
         return $this->showInMenu;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
+        return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function getChildren(): ArrayCollection
+    {
+        return $this->children;
+    }
+
+    public function setParent(?Node $parent): self
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    public function getParent(): ?self
+    {
+        return $this->parent;
+    }
+
+    public function setRoute(Route $route): self
+    {
+        $this->route = $route;
+        return $this;
+    }
+
+    public function getRoute(): ?self
+    {
+        return $this->route;
     }
 }

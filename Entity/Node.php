@@ -203,7 +203,7 @@ class Node
         return $this;
     }
 
-    public function getRoute(): ?self
+    public function getRoute(): ?Route
     {
         return $this->route;
     }

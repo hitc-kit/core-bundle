@@ -3,6 +3,7 @@
 namespace HitcKit\CoreBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Node
 {
+    private const TYPE_REFERENCE = 'hitckit_core.reference';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -22,17 +25,18 @@ class Node
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Node", inversedBy="children")
+     * @var ?self
+     * @ORM\ManyToOne(targetEntity=Node::class, inversedBy="children")
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Node", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity=Node::class, mappedBy="parent")
      */
     private $children;
 
     /**
-     * @ORM\OneToOne(targetEntity="Route")
+     * @ORM\ManyToOne(targetEntity="Route", inversedBy="nodes", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="route", referencedColumnName="name", nullable=false)
      */
     private $route;
@@ -77,9 +81,21 @@ class Node
      */
     private $priority = 0;
 
+    /**
+     * @var ?self
+     * @ORM\ManyToOne(targetEntity=Node::class, inversedBy="relations")
+     */
+    private $relation;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Node::class, mappedBy="relation")
+     */
+    private $relations;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
+        $this->relations = new ArrayCollection();
     }
 
     public function setId(int $id): self
@@ -95,68 +111,98 @@ class Node
 
     public function setType(string $type): self
     {
-        $this->type = $type;
+        if ($this->relation) {
+            $this->relation->setType($type);
+        } else {
+            $this->type = $type;
+        }
+
         return $this;
     }
 
     public function getType(): ?string
     {
-        return $this->type;
+        return $this->relation ? $this->relation->getType() : $this->type;
     }
 
     public function setTitle(?string $title): self
     {
-        $this->title = $title;
+        if ($this->relation) {
+            $this->relation->setTitle($title);
+        } else {
+            $this->title = $title;
+        }
+
         return $this;
     }
 
     public function getTitle(): ?string
     {
-        return $this->title;
+        return $this->relation ? $this->relation->getTitle() : $this->title;
     }
 
     public function setKeywords(?string $keywords): self
     {
-        $this->keywords = $keywords;
+        if ($this->relation) {
+            $this->relation->setKeywords($keywords);
+        } else {
+            $this->keywords = $keywords;
+        }
+
         return $this;
     }
 
     public function getKeywords(): ?string
     {
-        return $this->keywords;
+        return $this->relation ? $this->relation->getKeywords() : $this->keywords;
     }
 
     public function setDescription(?string $description): self
     {
-        $this->description = $description;
+        if ($this->relation) {
+            $this->relation->setDescription($description);
+        } else {
+            $this->description = $description;
+        }
+
         return $this;
     }
 
     public function getDescription(): ?string
     {
-        return $this->description;
+        return $this->relation ? $this->relation->getDescription() : $this->description;
     }
 
     public function setHeading(?string $heading): self
     {
-        $this->heading = $heading;
+        if ($this->relation) {
+            $this->relation->setHeading($heading);
+        } else {
+            $this->heading = $heading;
+        }
+
         return $this;
     }
 
     public function getHeading(): ?string
     {
-        return $this->heading;
+        return $this->relation ? $this->relation->getHeading() : $this->heading;
     }
 
     public function setContent(?string $content): self
     {
-        $this->content = $content;
+        if ($this->relation) {
+            $this->relation->setContent($content);
+        } else {
+            $this->content = $content;
+        }
+
         return $this;
     }
 
     public function getContent(): ?string
     {
-        return $this->content;
+        return $this->relation ? $this->relation->getContent() : $this->content;
     }
 
     public function setShowInMenu(bool $showInMenu): self
@@ -181,13 +227,19 @@ class Node
         return $this->priority;
     }
 
-    public function getChildren(): ArrayCollection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    public function setParent(?Node $parent): self
+    public function setParent(?self $parent): self
     {
+        if ($parent) {
+            $parent->getChildren()->add($this);
+        } else if ($this->parent) {
+            $this->parent->getChildren()->removeElement($this);
+        }
+
         $this->parent = $parent;
         return $this;
     }
@@ -200,11 +252,36 @@ class Node
     public function setRoute(Route $route): self
     {
         $this->route = $route;
+        $route->getNodes()->add($this);
         return $this;
     }
 
     public function getRoute(): ?Route
     {
         return $this->route;
+    }
+
+    public function setRelation(?self $relation): self
+    {
+        if ($relation) {
+            $this->type = self::TYPE_REFERENCE;
+            $relation->getRelations()->add($this);
+        } else if ($this->relation) {
+            $this->type = $this->type === self::TYPE_REFERENCE ? null : $this->type;
+            $this->relation->getRelations()->removeElement($this);
+        }
+
+        $this->relation = $relation;
+        return $this;
+    }
+
+    public function getRelation(): ?self
+    {
+        return $this->relation;
+    }
+
+    public function getRelations(): Collection
+    {
+        return $this->relations;
     }
 }

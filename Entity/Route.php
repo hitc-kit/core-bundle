@@ -4,6 +4,8 @@ namespace HitcKit\CoreBundle\Entity;
 
 use Symfony\Cmf\Bundle\RoutingBundle\Model\Route as RouteModel;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity
@@ -31,9 +33,15 @@ class Route extends RouteModel
      */
     private $groupRoute = 'main_tree';
 
+    /**
+     * @ORM\OneToMany(targetEntity=Node::class, mappedBy="route")
+     */
+    private $nodes;
+
     public function __construct(array $options = [])
     {
         $this->name = uniqid('', true);
+        $this->nodes = new ArrayCollection();
         parent::__construct($options);
     }
 
@@ -71,5 +79,10 @@ class Route extends RouteModel
     {
         $this->groupRoute = $groupRoute;
         return $this;
+    }
+
+    public function getNodes(): Collection
+    {
+        return $this->nodes;
     }
 }

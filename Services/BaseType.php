@@ -5,13 +5,13 @@ namespace HitcKit\CoreBundle\Services;
 use HitcKit\CoreBundle\Controller\DefaultController;
 // use HitcKit\CoreBundle\Entity\Node;
 
-class CoreType implements NodeTypeInterface
+class BaseType implements NodeTypeInterface
 {
     use BaseTypeTrait;
 
     public static function getName(): string
     {
-        return 'hitckit_core.core_type';
+        return 'hitckit_core.base';
     }
 
     public function getNameController(): string

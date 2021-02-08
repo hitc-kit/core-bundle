@@ -17,6 +17,9 @@
         "knplabs/knp-paginator-bundle": "^5.3",
         "friendsofsymfony/ckeditor-bundle": "^2.2"
     },
+    "conflict": {
+        "symfony/translation": "4.4.19"
+    },
     "autoload": {
         "psr-4": {
             "HitcKit\\CoreBundle\\": ""

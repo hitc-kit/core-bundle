@@ -1,9 +1,9 @@
 Node: Раздел
+Name: Название
 Title: Заголовок
 Keywords: Ключевые слова
 Description: Описание
 Type: Тип
-Heading: Заголовок
 Content: Содержание
 Show In Menu: Отображать в меню
 hitckit_core.core_type: Простой раздел

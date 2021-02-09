@@ -1,0 +1,6 @@
+{% extends '@!SonataAdmin/standard_layout.html.twig' %}
+
+{% block sonata_head_title %}
+    {% set _title = _title is empty ? _title : ' - ' ~ _title %}
+    {{ parent() }}
+{% endblock %}

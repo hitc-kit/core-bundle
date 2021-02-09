@@ -47,6 +47,11 @@ class Node
     private $type;
 
     /**
+     * @ORM\Column
+     */
+    private $name;
+
+    /**
      * @ORM\Column(nullable=true)
      */
     private $title;
@@ -62,12 +67,7 @@ class Node
     private $description;
 
     /**
-     * @ORM\Column(nullable=true)
-     */
-    private $heading;
-
-    /**
-     * @ORM\Column(nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $content;
 
@@ -125,6 +125,22 @@ class Node
         return $this->relation ? $this->relation->getType() : $this->type;
     }
 
+    public function setName(?string $name): self
+    {
+        if ($this->relation) {
+            $this->relation->setName($name);
+        } else {
+            $this->name = $name;
+        }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->relation ? $this->relation->getName() : $this->name;
+    }
+
     public function setTitle(?string $title): self
     {
         if ($this->relation) {
@@ -171,22 +187,6 @@ class Node
     public function getDescription(): ?string
     {
         return $this->relation ? $this->relation->getDescription() : $this->description;
-    }
-
-    public function setHeading(?string $heading): self
-    {
-        if ($this->relation) {
-            $this->relation->setHeading($heading);
-        } else {
-            $this->heading = $heading;
-        }
-
-        return $this;
-    }
-
-    public function getHeading(): ?string
-    {
-        return $this->relation ? $this->relation->getHeading() : $this->heading;
     }
 
     public function setContent(?string $content): self

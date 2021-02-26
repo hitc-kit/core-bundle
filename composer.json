@@ -15,7 +15,9 @@
         "symfony-cmf/routing-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-paginator-bundle": "^5.3",
-        "friendsofsymfony/ckeditor-bundle": "^2.2"
+        "friendsofsymfony/ckeditor-bundle": "^2.2",
+        "cpoint-eu/mobile-detect-bundle": "^2.1",
+        "symfony/webpack-encore-bundle": "^1.11"
     },
     "autoload": {
         "psr-4": {

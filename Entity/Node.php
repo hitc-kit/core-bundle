@@ -5,18 +5,18 @@ namespace HitcKit\CoreBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\Menu\NodeInterface;
+use Traversable;
 
 /**
  * @ORM\Entity
- * @ORM\Table(
- *     name="orm_tree",
- *     indexes={@ORM\Index(columns={"type"})}
- * )
+ * @ORM\Table(name="orm_tree", indexes={@ORM\Index(columns={"alias"})})
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\HasLifecycleCallbacks
  */
-class Node
+class Node implements NodeInterface
 {
-    private const TYPE_REFERENCE = 'hitckit_core.reference';
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -26,12 +26,13 @@ class Node
 
     /**
      * @var ?self
-     * @ORM\ManyToOne(targetEntity=Node::class, inversedBy="children")
+     * @ORM\ManyToOne(targetEntity=Node::class, inversedBy="children", cascade={"persist", "refresh"})
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity=Node::class, mappedBy="parent")
+     * @ORM\OrderBy({"priority"="DESC"})
      */
     private $children;
 
@@ -42,12 +43,12 @@ class Node
     private $route;
 
     /**
-     * @ORM\Column
+     * @ORM\Column(nullable=true, unique=true)
      */
-    private $type;
+    private $alias;
 
     /**
-     * @ORM\Column
+     * @ORM\Column(nullable=true)
      */
     private $name;
 
@@ -74,10 +75,10 @@ class Node
     /**
      * @ORM\Column(type="boolean")
      */
-    private $showInMenu = true;
+    private $showInMenu = false;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
      */
     private $priority = 0;
 
@@ -92,16 +93,15 @@ class Node
      */
     private $relations;
 
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $depth = 0;
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
         $this->relations = new ArrayCollection();
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-        return $this;
     }
 
     public function getId(): ?int
@@ -109,23 +109,12 @@ class Node
         return $this->id;
     }
 
-    public function setType(string $type): self
-    {
-        if ($this->relation) {
-            $this->relation->setType($type);
-        } else {
-            $this->type = $type;
-        }
-
-        return $this;
-    }
-
     public function getType(): ?string
     {
-        return $this->relation ? $this->relation->getType() : $this->type;
+        return strtolower(substr(strrchr(get_class($this), '\\'), 1));
     }
 
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         if ($this->relation) {
             $this->relation->setName($name);
@@ -136,9 +125,9 @@ class Node
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
-        return $this->relation ? $this->relation->getName() : $this->name;
+        return (string)($this->relation ? $this->relation->getName() : $this->name);
     }
 
     public function setTitle(?string $title): self
@@ -227,7 +216,10 @@ class Node
         return $this->priority;
     }
 
-    public function getChildren(): Collection
+    /**
+     * @return Collection
+     */
+    public function getChildren(): Traversable
     {
         return $this->children;
     }
@@ -249,6 +241,11 @@ class Node
         return $this->parent;
     }
 
+    public function getParentByDepth(int $depth): self
+    {
+        return ($this->depth <= $depth || !$this->parent) ? $this : $this->parent->getParentByDepth($depth);
+    }
+
     public function setRoute(Route $route): self
     {
         $this->route = $route;
@@ -264,10 +261,8 @@ class Node
     public function setRelation(?self $relation): self
     {
         if ($relation) {
-            $this->type = self::TYPE_REFERENCE;
             $relation->getRelations()->add($this);
         } else if ($this->relation) {
-            $this->type = $this->type === self::TYPE_REFERENCE ? null : $this->type;
             $this->relation->getRelations()->removeElement($this);
         }
 
@@ -283,5 +278,46 @@ class Node
     public function getRelations(): Collection
     {
         return $this->relations;
+    }
+
+    public function getOptions(): array
+    {
+        return [
+            'route' => $this->route->getName(),
+            'display' => $this->showInMenu
+        ];
+    }
+
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(?string $alias): self
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
+    public function getDepth(): int
+    {
+        return $this->depth;
+    }
+
+    public function setDepth(int $depth): Node
+    {
+        $this->depth = $depth;
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function calcDepth(): void
+    {
+        if ($this->parent) {
+            $this->depth = $this->parent->getDepth() + 1;
+        }
     }
 }

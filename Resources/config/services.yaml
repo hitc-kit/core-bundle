@@ -13,3 +13,9 @@ services:
     HitcKit\CoreBundle\Services\NodeTypeManager:
         arguments:
             - !tagged_iterator { tag: hitckit_core.node_type, index_by: key, default_index_method: getName }
+
+    HitcKit\CoreBundle\Provider\CoreMenuProvider:
+        arguments:
+            - '@knp_menu.factory'
+        tags:
+            - { name: knp_menu.provider }

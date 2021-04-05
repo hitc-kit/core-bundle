@@ -116,82 +116,52 @@ class Node implements NodeInterface
 
     public function setName(string $name): self
     {
-        if ($this->relation) {
-            $this->relation->setName($name);
-        } else {
-            $this->name = $name;
-        }
-
-        return $this;
+        return $this->setToSource(__FUNCTION__, $this->name, $name);
     }
 
     public function getName(): string
     {
-        return (string)($this->relation ? $this->relation->getName() : $this->name);
+        return (string)$this->getFromSource(__FUNCTION__, $this->name);
     }
 
     public function setTitle(?string $title): self
     {
-        if ($this->relation) {
-            $this->relation->setTitle($title);
-        } else {
-            $this->title = $title;
-        }
-
-        return $this;
+        return $this->setToSource(__FUNCTION__, $this->title, $title);
     }
 
     public function getTitle(): ?string
     {
-        return $this->relation ? $this->relation->getTitle() : $this->title;
+        return $this->getFromSource(__FUNCTION__, $this->title);
     }
 
     public function setKeywords(?string $keywords): self
     {
-        if ($this->relation) {
-            $this->relation->setKeywords($keywords);
-        } else {
-            $this->keywords = $keywords;
-        }
-
-        return $this;
+        return $this->setToSource(__FUNCTION__, $this->keywords, $keywords);
     }
 
     public function getKeywords(): ?string
     {
-        return $this->relation ? $this->relation->getKeywords() : $this->keywords;
+        return $this->getFromSource(__FUNCTION__, $this->keywords);
     }
 
     public function setDescription(?string $description): self
     {
-        if ($this->relation) {
-            $this->relation->setDescription($description);
-        } else {
-            $this->description = $description;
-        }
-
-        return $this;
+        return $this->setToSource(__FUNCTION__, $this->description, $description);
     }
 
     public function getDescription(): ?string
     {
-        return $this->relation ? $this->relation->getDescription() : $this->description;
+        return $this->getFromSource(__FUNCTION__, $this->description);
     }
 
     public function setContent(?string $content): self
     {
-        if ($this->relation) {
-            $this->relation->setContent($content);
-        } else {
-            $this->content = $content;
-        }
-
-        return $this;
+        return $this->setToSource(__FUNCTION__, $this->content, $content);
     }
 
     public function getContent(): ?string
     {
-        return $this->relation ? $this->relation->getContent() : $this->content;
+        return $this->getFromSource(__FUNCTION__, $this->content);
     }
 
     public function setShowInMenu(bool $showInMenu): self
@@ -304,7 +274,7 @@ class Node implements NodeInterface
         return $this->depth;
     }
 
-    public function setDepth(int $depth): Node
+    public function setDepth(int $depth): self
     {
         $this->depth = $depth;
         return $this;
@@ -319,5 +289,21 @@ class Node implements NodeInterface
         if ($this->parent) {
             $this->depth = $this->parent->getDepth() + 1;
         }
+    }
+
+    protected function setToSource(string $method, &$field, $value): self
+    {
+        if ($this->relation) {
+            $this->relation->{$method}($value);
+        } else {
+            $field = $value;
+        }
+
+        return $this;
+    }
+
+    protected function getFromSource(string $method, $field)
+    {
+        return $this->relation ? $this->relation->{$method}() : $field;
     }
 }

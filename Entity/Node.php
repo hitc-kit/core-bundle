@@ -245,6 +245,11 @@ class Node implements NodeInterface
         return $this->relation;
     }
 
+    public function isRelation(): bool
+    {
+        return isset($this->relation);
+    }
+
     public function getRelations(): Collection
     {
         return $this->relations;

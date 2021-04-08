@@ -22,6 +22,9 @@ class CoreData
         $this->request = $requestStack->getCurrentRequest();
     }
 
+    /**
+     * @return Route|RouteOrm|null
+     */
     public function getRoute(): ?Route
     {
         if (!isset($this->route)) {

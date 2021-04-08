@@ -90,6 +90,7 @@ class Node implements NodeInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Node::class, mappedBy="relation")
+     * @ORM\OrderBy({"depth"="ASC"})
      */
     private $relations;
 

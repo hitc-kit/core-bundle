@@ -27,7 +27,8 @@ class CoreMenuProvider implements MenuProviderInterface
      */
     public function get(string $name, array $options = []): ItemInterface
     {
-        $menuNode = $this->manager->getRepository(Node::class)->findOneBy(['alias' => $name]);
+        $repository = $this->manager->getRepository(Node::class);
+        $menuNode = $repository->findOneBy(['alias' => $name]) ?: $repository->find((int)$name);
 
         if ($menuNode) {
             $loader = new NodeLoader($this->factory);

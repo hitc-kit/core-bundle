@@ -26,13 +26,18 @@ class Node implements NodeInterface
 
     /**
      * @var ?self
-     * @ORM\ManyToOne(targetEntity=Node::class, inversedBy="children", cascade={"persist", "refresh"})
+     * @ORM\ManyToOne(targetEntity=Node::class, inversedBy="subnodes", cascade={"persist", "refresh"})
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity=Node::class, mappedBy="parent")
      * @ORM\OrderBy({"priority"="DESC"})
+     */
+    private $subnodes;
+
+    /**
+     * @var Traversable
      */
     private $children;
 
@@ -106,7 +111,7 @@ class Node implements NodeInterface
 
     public function __construct()
     {
-        $this->children = new ArrayCollection();
+        $this->subnodes = new ArrayCollection();
         $this->relations = new ArrayCollection();
     }
 
@@ -192,20 +197,34 @@ class Node implements NodeInterface
         return $this->priority;
     }
 
+    public function getSubnodes(): Collection
+    {
+        return $this->subnodes;
+    }
+
     /**
      * @return Collection
      */
     public function getChildren(): Traversable
     {
-        return $this->children;
+        return $this->children ?: $this->subnodes;
+    }
+
+    public function addChild(self $node): self {
+        if (!$this->children) {
+            $this->children = clone $this->subnodes;
+        }
+
+        $this->children->add($node);
+        return $this;
     }
 
     public function setParent(?self $parent): self
     {
         if ($parent) {
-            $parent->getChildren()->add($this);
+            $parent->getSubnodes()->add($this);
         } else if ($this->parent) {
-            $this->parent->getChildren()->removeElement($this);
+            $this->parent->getSubnodes()->removeElement($this);
         }
 
         $this->parent = $parent;

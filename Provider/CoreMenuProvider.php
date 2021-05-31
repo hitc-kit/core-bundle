@@ -15,6 +15,7 @@ class CoreMenuProvider implements MenuProviderInterface
 {
     protected $factory;
     protected $manager;
+    private $cache = [];
 
     public function __construct(FactoryInterface $factory, EntityManagerInterface $manager)
     {
@@ -27,22 +28,24 @@ class CoreMenuProvider implements MenuProviderInterface
      */
     public function get(string $name, array $options = []): ItemInterface
     {
-        $repository = $this->manager->getRepository(Node::class);
-        $menuNode = $repository->findOneBy(['alias' => $name]) ?: $repository->find((int)$name);
+        if (!isset($this->cache[$name])) {
+            $repository = $this->manager->getRepository(Node::class);
+            $node = $repository->findOneBy(['alias' => $name]) ?: $repository->find((int)$name);
 
-        if ($menuNode) {
-            $loader = new NodeLoader($this->factory);
-            $root = $loader->load($menuNode);
-            $class = (isset($options['rootClass'])) ? trim($options['rootClass']) : false;
-
-            if ($class) {
-                $root->setChildrenAttribute('class', $class);
+            if ($node) {
+                $loader = new NodeLoader($this->factory);
+                $menu = $loader->load($node);
+                $this->cache[$name] = $menu;
+            } else {
+                throw new InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
             }
-
-            return $root;
-        } else {
-            throw new InvalidArgumentException(sprintf('The menu "%s" is not defined.', $name));
         }
+
+        if (isset($options['rootClass'])) {
+            $this->cache[$name]->setChildrenAttribute('class', trim($options['rootClass']));
+        }
+
+        return $this->cache[$name];
     }
 
     /**

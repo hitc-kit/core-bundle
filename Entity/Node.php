@@ -99,6 +99,11 @@ class Node implements NodeInterface
      */
     private $depth = 0;
 
+    /**
+     * @var array
+     */
+    private $options = [];
+
     public function __construct()
     {
         $this->children = new ArrayCollection();
@@ -256,12 +261,18 @@ class Node implements NodeInterface
         return $this->relations;
     }
 
+    public function setOptions(array $options, $merge = true): self
+    {
+        $this->options = $merge ? array_merge($this->options, $options) : $options;
+        return $this;
+    }
+
     public function getOptions(): array
     {
-        return [
+        return array_merge([
             'route' => $this->route->getName(),
             'display' => $this->showInMenu
-        ];
+        ], $this->options);
     }
 
     public function getAlias(): ?string

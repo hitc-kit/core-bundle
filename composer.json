@@ -16,7 +16,6 @@
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-paginator-bundle": "^5.3",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
-        "cpoint-eu/mobile-detect-bundle": "^2.1",
         "symfony/webpack-encore-bundle": "^1.11"
     },
     "autoload": {

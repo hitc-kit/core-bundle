@@ -1,4 +1,4 @@
-Node: Раздел
+node: Раздел
 Name: Название
 Title: Заголовок
 Keywords: Ключевые слова
@@ -9,3 +9,8 @@ Show In Menu: Отображать в меню
 hitckit_core.core_type: Простой раздел
 seo: Продвижение
 section: Раздел
+Node Edit: Данные раздела
+Block List: Список блоков
+Block Create: Создание блока
+block: Блок
+Area: Область

@@ -21,6 +21,9 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $this->processConfiguration($configuration, $configs);
+
         $container
             ->registerForAutoconfiguration(NodeTypeInterface::class)
             ->addTag('hitckit_core.node_type')

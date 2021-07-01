@@ -1,0 +1,5 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+    {{ admin.children['hitc_kit_core.admin.block_text'].generateMenuUrl('create') }}
+{% endblock %}

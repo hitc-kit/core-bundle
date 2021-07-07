@@ -1,0 +1,2 @@
+globals:
+    core: '@HitcKit\CoreBundle\Services\CoreData'

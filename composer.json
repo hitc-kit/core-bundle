@@ -10,13 +10,13 @@
         }
     ],
     "require": {
-        "sonata-project/admin-bundle": "^3.78",
-        "sonata-project/doctrine-orm-admin-bundle": "^3.24",
         "symfony-cmf/routing-bundle": "^2.4",
         "knplabs/knp-menu-bundle": "^3.0",
         "knplabs/knp-paginator-bundle": "^5.3",
         "friendsofsymfony/ckeditor-bundle": "^2.2",
-        "symfony/webpack-encore-bundle": "^1.11"
+        "symfony/webpack-encore-bundle": "^1.11",
+        "twig/extra-bundle": "^3.3",
+        "twig/string-extra": "^3.3"
     },
     "autoload": {
         "psr-4": {

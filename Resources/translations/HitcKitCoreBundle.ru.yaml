@@ -1,10 +1,9 @@
 node: Раздел
-Name: Название
-Title: Заголовок
-Keywords: Ключевые слова
-Description: Описание
+title: Заголовок
+keywords: Ключевые слова
+description: Описание
 Type: Тип
-Content: Содержание
+content: Содержание
 Show In Menu: Отображать в меню
 hitckit_core.core_type: Простой раздел
 seo: Продвижение
@@ -14,3 +13,14 @@ Block List: Список блоков
 Block Create: Создание блока
 block: Блок
 Area: Область
+main: Основное
+tree: Дерево разделов
+name: Имя раздела
+actions: Действия
+count_rows: '%count% из %count_total%'
+count_rows_label: 'Записей:'
+no_rows: Ни одного раздела не найдено.
+
+hitc_kit_core:
+    node_list: Список разделов
+    node_edit: Редактирование раздела

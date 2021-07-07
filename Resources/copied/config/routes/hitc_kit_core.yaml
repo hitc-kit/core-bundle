@@ -1,0 +1,6 @@
+hitc_kit_core_file:
+    resource: '@HitcKitCoreBundle/Resources/config/routes.yaml'
+
+hitc_kit_core_admin_file:
+    resource: '@HitcKitCoreBundle/Resources/config/routes_admin.yaml'
+    prefix: /admin

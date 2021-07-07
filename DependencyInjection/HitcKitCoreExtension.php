@@ -3,27 +3,22 @@
 namespace HitcKit\CoreBundle\DependencyInjection;
 
 use Exception;
-use HitcKit\CoreBundle\Entity\Route;
 use HitcKit\CoreBundle\Services\NodeTypeInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\Yaml\Yaml;
-use HitcKit\CoreBundle\Services\CoreData;
 
-class HitcKitCoreExtension extends Extension implements PrependExtensionInterface
+class HitcKitCoreExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
     /**
      * @inheritDoc
      * @throws Exception
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function loadInternal(array $config, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $this->processConfiguration($configuration, $configs);
-
         $container
             ->registerForAutoconfiguration(NodeTypeInterface::class)
             ->addTag('hitckit_core.node_type')
@@ -38,22 +33,8 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
         $bundles = $container->getParameter('kernel.bundles');
 
         if (isset($bundles['CmfRoutingBundle'])) {
-            $container->prependExtensionConfig('cmf_routing', [
-                'chain' => [
-                    'routers_by_id' => [
-                        'router.default' => 200,
-                        'cmf_routing.dynamic_router' => 100,
-                    ],
-                ],
-                'dynamic' => [
-                    'persistence' => [
-                        'orm' => [
-                            'enabled' => true,
-                            'route_class' => Route::class,
-                        ],
-                    ],
-                ],
-            ]);
+            $config = Yaml::parseFile(__DIR__.'/../Resources/config/cmf_routing.yaml');
+            $container->prependExtensionConfig('cmf_routing', $config);
         }
 
         if (isset($bundles['FOSCKEditorBundle'])) {
@@ -61,30 +42,14 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
             $container->prependExtensionConfig('fos_ck_editor', $config);
         }
 
-        if (isset($bundles['SonataAdminBundle'])) {
-            $container->loadFromExtension('sonata_admin', [
-                'title' => 'Надежный IT сервис',
-                'options' => ['title_mode' => 'single_text'],
-                'templates' => [
-                    'layout' => '@HitcKitCore/sonata_standard_layout.html.twig'
-                ]
-            ]);
-
-            $container->prependExtensionConfig('framework', [
-                'translator' => [
-                    'paths' => [
-                        realpath(__DIR__.'/../Resources/translations-external')
-                    ]
-                ]
-            ]);
+        if (isset($bundles['TwigBundle'])) {
+            $config = Yaml::parseFile(__DIR__.'/../Resources/config/twig.yaml');
+            $container->prependExtensionConfig('twig', $config);
         }
 
-        if (isset($bundles['TwigBundle'])) {
-            $container->prependExtensionConfig('twig', [
-                'globals' => [
-                    'core' => '@'.CoreData::class
-                ]
-            ]);
+        if (isset($bundles['HitcKitAdminBundle'])) {
+            $config = Yaml::parseFile(__DIR__.'/../Resources/config/hitc_kit_admin.yaml');
+            $container->prependExtensionConfig('hitc_kit_admin', $config);
         }
     }
 }

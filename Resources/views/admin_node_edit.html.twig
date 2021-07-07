@@ -1,0 +1,20 @@
+{% extends '@HitcKitAdmin/dashboard.html.twig' %}
+{% trans_default_domain 'HitcKitCoreBundle' %}
+
+{% set title_translation_domain = 'HitcKitCoreBundle' %}
+{% if node %}{% set title_target = node.name %}{% endif %}
+
+{% form_theme form '@HitcKitAdmin/bootstrap_4_layout.html.twig' %}
+
+{% block content %}
+    {{ form_start(form, { attr: { class: 'card card-outline card-info', 'novalidate': 'novalidate' } }) }}
+        <div class="card-body">
+            {% set buttons = form_widget(form.cancel, { attr: { class: 'btn-secondary float-left' } }) %}
+            {% set buttons = buttons ~ form_widget(form.save, { attr: { class: 'btn-success' } }) %}
+            {{ form_widget(form, { attr: { class: 'mb-n3' } }) }}
+        </div>
+        <div class="card-footer text-right clearfix">
+            {{ buttons|raw }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -3,7 +3,6 @@
 namespace HitcKit\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Cmf\Component\Routing\ChainRouterInterface;
 use HitcKit\CoreBundle\Entity\Route as RouteOrm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,17 +16,16 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/")
-     * @param ChainRouterInterface $router
+     * @Route("/", name="hitc_kit_core.home")
      * @param Request $request
      * @return Response
      */
-    public function home(ChainRouterInterface $router, Request $request)
+    public function home(Request $request)
     {
-        $route = $router->getRouteCollection()->get('home');
+        $route = $this->getDoctrine()->getRepository(RouteOrm::class)->find('home');
 
         $controller = $route
-            ? (string)$route->getDefault(RouteOrm::CONTROLLER_NAME)
+            ? $route->getDefault(RouteOrm::CONTROLLER_NAME)
             : DefaultController::class.'::index'
         ;
 

@@ -7,9 +7,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\Menu\NodeInterface;
 use Traversable;
+use HitcKit\CoreBundle\Repository\NodeRepository;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=NodeRepository::class)
  * @ORM\Table(name="orm_tree", indexes={@ORM\Index(columns={"alias"})})
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
@@ -125,7 +126,7 @@ class Node implements NodeInterface
         return strtolower(substr(strrchr(get_class($this), '\\'), 1));
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         return $this->setToSource(__FUNCTION__, $this->name, $name);
     }

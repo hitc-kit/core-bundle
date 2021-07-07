@@ -1,43 +1,33 @@
 <?php
 
-
 namespace HitcKit\CoreBundle\Services;
 
-
 use HitcKit\CoreBundle\Entity\Node;
-use HitcKit\CoreBundle\Entity\Route as RouteOrm;
-use Symfony\Component\Routing\Route;
-use Symfony\Cmf\Component\Routing\ChainRouterInterface;
+use HitcKit\CoreBundle\Entity\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Doctrine\Persistence\ManagerRegistry;
 
 class CoreData
 {
-    protected $router;
+    protected $doctrine;
     protected $request;
-    private $route;
 
-    public function __construct(ChainRouterInterface $router, RequestStack $requestStack)
+    public function __construct(ManagerRegistry $doctrine, RequestStack $requestStack)
     {
-        $this->router = $router;
+        $this->doctrine = $doctrine;
         $this->request = $requestStack->getCurrentRequest();
     }
 
-    /**
-     * @return Route|RouteOrm|null
-     */
     public function getRoute(): ?Route
     {
-        if (!isset($this->route)) {
-            $name = $this->request->attributes->get('_route');
-            $this->route = $this->router->getRouteCollection()->get($name);
-        }
+        $name = $this->request->attributes->get('_route');
 
-        return $this->route;
+        return $this->doctrine->getRepository(Route::class)->find($name);
     }
 
     public function getNode(): ?Node
     {
         $route = $this->getRoute();
-        return $route instanceof RouteOrm ? $route->getNodes()->first() : null;
+        return $route ? $route->getNodes()->first() : null;
     }
 }

@@ -1,0 +1,30 @@
+menu:
+    items:
+        main:
+            uri: '#'
+
+            extras:
+                icon_class: 'fas fa-layer-group'
+                translation_domain: HitcKitCoreBundle
+
+            attributes:
+                class: menu-open
+
+            children:
+                tree:
+                    route: 'hitc_kit_core.node_list'
+                    displayChildren: false
+
+                    extras:
+                        icon_class: 'fas fa-sitemap'
+                        translation_domain: HitcKitCoreBundle
+
+                    children:
+                        edit:
+                            route: 'hitc_kit_core.node_edit'
+                            display: false
+
+                            extras:
+                                icon_class: 'fas fa-pencil-alt'
+                                translation_domain: HitcKitAdminBundle
+                                route_inject_params: ['nodeId']

@@ -61,24 +61,6 @@ class HitcKitCoreExtension extends Extension implements PrependExtensionInterfac
             $container->prependExtensionConfig('fos_ck_editor', $config);
         }
 
-        if (isset($bundles['SonataAdminBundle'])) {
-            $container->loadFromExtension('sonata_admin', [
-                'title' => 'Надежный IT сервис',
-                'options' => ['title_mode' => 'single_text'],
-                'templates' => [
-                    'layout' => '@HitcKitCore/sonata_standard_layout.html.twig'
-                ]
-            ]);
-
-            $container->prependExtensionConfig('framework', [
-                'translator' => [
-                    'paths' => [
-                        realpath(__DIR__.'/../Resources/translations-external')
-                    ]
-                ]
-            ]);
-        }
-
         if (isset($bundles['TwigBundle'])) {
             $container->prependExtensionConfig('twig', [
                 'globals' => [
